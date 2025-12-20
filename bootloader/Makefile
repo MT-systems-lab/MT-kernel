@@ -1,37 +1,20 @@
-CC = gcc
-LD = ld
-OBJCOPY = objcopy
+# Compiler: MinGW for 64-bit Windows
+CC = x86_64-w64-mingw32-gcc
+
 BUILD_DIR = build
 
-EFIINC = /usr/include/efi
-EFIINCS = -I$(EFIINC) -I$(EFIINC)/x86_64 -I$(EFIINC)/protocol
-LIB = /usr/lib
-EFILIB = /usr/lib
-EFI_CRT_OBJS = $(EFILIB)/crt0-efi-x86_64.o
-EFI_LDS = $(EFILIB)/elf_x86_64_efi.lds
+CFLAGS = -Wall -Wextra -std=c11 -fno-builtin -fno-stack-protector \
+         -Wl,--subsystem,10 -e efi_main -nostdlib
 
-CFLAGS = $(EFIINCS) -fno-stack-protector -fpic \
-         -fshort-wchar -mno-red-zone -Wall -std=c23 \
-         -DEFI_FUNCTION_WRAPPER
-
-LDFLAGS = -nostdlib -znocombreloc -T $(EFI_LDS) -shared \
-          -Bsymbolic -L $(EFILIB) -L $(LIB) $(EFI_CRT_OBJS)
+INCLUDES = -I/usr/include/efi -I/usr/include/efi/x86_64 -I/usr/include/efi/protocol
 
 TARGET = $(BUILD_DIR)/bootloader.efi
 
 all: $(TARGET)
 
-$(BUILD_DIR)/%.o: %.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(BUILD_DIR)/bootloader.so: $(BUILD_DIR)/main.o
-	$(LD) $(LDFLAGS) $(BUILD_DIR)/main.o -o $@ -lefi -lgnuefi
-
-$(BUILD_DIR)/%.efi: $(BUILD_DIR)/%.so
-	$(OBJCOPY) -j .text -j .sdata -j .data -j .rodata -j .dynamic \
-		-j .dynsym  -j .rel -j .rela -j .reloc \
-		--target=efi-app-x86_64 $^ $@
+$(TARGET): main.c
+	@mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $<
 
 clean:
 	rm -rf $(BUILD_DIR)
