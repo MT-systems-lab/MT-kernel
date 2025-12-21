@@ -12,11 +12,17 @@ typedef struct {
 } Framebuffer;
 
 typedef struct {
-    Framebuffer Gpu;
-
     void* MemoryMap;
     uint64_t MapSize;
+    uint64_t MapKey;
     uint64_t DescriptorSize;
+    uint32_t DescriptorVersion;
+} MemoryInfo;
+
+typedef struct {
+    Framebuffer Gpu;
+
+    MemoryInfo MemInfo;
 
     void* AcpiRsdp;
     void* SmbiosInfo;

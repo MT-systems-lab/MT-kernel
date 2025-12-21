@@ -1,9 +1,8 @@
+#include "boot_info.h"
 #include "efi_tools.h"
 #include "guid_utils.h"
-#include "boot_info.h"
 #include <efi.h>
 #include <efilib.h>
-
 
 EFI_STATUS
 EFIAPI
@@ -48,7 +47,55 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     b_info->SmbiosInfo = SmbiosPtr;
     Print(L"SMBIOS Entry Point Address: %p\n", SmbiosPtr);
 
+    b_info->RuntimeServices = ST->RuntimeServices;
+
     Print(L"--------------------------------------------------\n");
+
+    // ------------------------------
+    // memory map
+    // ------------------------------
+    UINTN MemoryMapSize = 0;
+    EFI_MEMORY_DESCRIPTOR *MemoryMap = NULL;
+    UINTN MapKey;
+    UINTN DescriptorSize;
+    UINT32 DescriptorVersion;
+    uefi_call_wrapper(BS->GetMemoryMap, 5, &MemoryMapSize, NULL, &MapKey, &DescriptorSize,
+                      &DescriptorVersion);
+    MemoryMapSize += 2 * DescriptorSize;
+    uefi_call_wrapper(BS->AllocatePool, 3, EfiLoaderData, MemoryMapSize, (void **)&MemoryMap);
+    uefi_call_wrapper(BS->GetMemoryMap, 5, &MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize,
+                      &DescriptorVersion);
+
+    b_info->MemInfo.MemoryMap = MemoryMap;
+    b_info->MemInfo.MapSize = MemoryMapSize;
+    b_info->MemInfo.MapKey = MapKey;
+    b_info->MemInfo.DescriptorSize = DescriptorSize;
+    b_info->MemInfo.DescriptorVersion = DescriptorVersion;
+    Print(L"Memory Map Address: %p\n", MemoryMap);
+    Print(L"Memory Map Size: %lu bytes\n", MemoryMapSize);
+    Print(L"Descriptor Size: %u bytes\n", DescriptorSize);
+
+    UINT32 MEMType = MemoryMap->Type;
+    EFI_PHYSICAL_ADDRESS PhysicalStart = MemoryMap->PhysicalStart;
+    EFI_VIRTUAL_ADDRESS VirtualStart = MemoryMap->VirtualStart;
+    UINT64 NumberOfPages = MemoryMap->NumberOfPages;
+    Print(L"Memory Type: %u\n", MEMType);
+    Print(L"Physical Start: %p\n", PhysicalStart);
+    Print(L"Virtual Start: %p\n", VirtualStart);
+    Print(L"Number Of 4KiB Pages: %lu\n", NumberOfPages);
+
+    Print(L"\nMemory Map Succesfully Retrieved.\n");
+    Print(L"--------------------------------------------------\n");
+
+    // ------------------------------
+    // framebuffer
+    // ------------------------------
+
+    EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
+    EFI_GRAPHICS_OUTPUT_PROTOCOL *Gop;
+
+    uefi_call_wrapper(
+        BS->LocateProtocol, 3, &gop_guid, NULL, (void **)&Gop);
 
     wait_for_key();
 
