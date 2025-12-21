@@ -11,6 +11,8 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *ST) {
                       EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
 
     InitializeLib(ImageHandle, ST);
+
+
     Print(L"-------------------------------\n");
     Print(L"|     MT GNU-EFI Bootloader   |\n");
     Print(L"-------------------------------\n");
@@ -24,6 +26,8 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *ST) {
     }
     Print(L"Current Time: %02d:%02d:%02d\n", Time.Hour, Time.Minute, Time.Second);
     Print(L"Date: %04d-%02d-%02d\n", Time.Year, Time.Month, Time.Day);
+    Print(L"--------------------------------------------------\n");
+
 
     Print(L"\n");
     Print(L"--- UEFI Configuration Table ---\n");
@@ -39,6 +43,7 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *ST) {
               &ConfigTable[i].VendorTable);
     }
     Print(L"--------------------------------------------------\n");
+
 
     while (1) {
         __asm__ __volatile__("hlt");
