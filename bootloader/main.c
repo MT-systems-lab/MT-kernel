@@ -88,7 +88,7 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     // SMBIOS
     // ------------------------------
     print_smbios_legacy();
-    sleep_seconds(1);
+    // sleep_seconds(1);
     wait_for_key();
 
     // ------------------------------

@@ -5,6 +5,7 @@ SECTIONS
     . = 1M;
 
     .text : {
+        *(.entry)
         *(.text)
     }
     .rodata : {

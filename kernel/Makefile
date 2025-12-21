@@ -11,7 +11,7 @@ BUILD_DIR = build
 TARGET_ELF = $(BUILD_DIR)/kernel.elf
 TARGET_BIN = $(BUILD_DIR)/kernel.bin
 
-SRCS = kernel.c
+SRCS = $(wildcard *.c)
 OBJS = $(patsubst %.c, $(BUILD_DIR)/%.o, $(SRCS))
 
 all: $(TARGET_BIN)

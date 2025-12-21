@@ -1,0 +1,40 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-ffreestanding",
+      "-mno-red-zone",
+      "-fno-stack-protector",
+      "-fno-pic",
+      "-m64",
+      "-I../common",
+      "-c",
+      "-g",
+      "-o",
+      "build/graphics.o",
+      "graphics.c"
+    ],
+    "directory": "/home/tcvdh/Documents/OS_THIJS_TEST/kernel",
+    "file": "/home/tcvdh/Documents/OS_THIJS_TEST/kernel/graphics.c",
+    "output": "/home/tcvdh/Documents/OS_THIJS_TEST/kernel/build/graphics.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-ffreestanding",
+      "-mno-red-zone",
+      "-fno-stack-protector",
+      "-fno-pic",
+      "-m64",
+      "-I../common",
+      "-c",
+      "-g",
+      "-o",
+      "build/kernel.o",
+      "kernel.c"
+    ],
+    "directory": "/home/tcvdh/Documents/OS_THIJS_TEST/kernel",
+    "file": "/home/tcvdh/Documents/OS_THIJS_TEST/kernel/kernel.c",
+    "output": "/home/tcvdh/Documents/OS_THIJS_TEST/kernel/build/kernel.o"
+  }
+]
