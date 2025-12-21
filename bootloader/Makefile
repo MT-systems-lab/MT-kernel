@@ -13,7 +13,7 @@ EFI_LDS = $(EFILIB)/elf_x86_64_efi.lds
 SRCS = $(wildcard *.c)
 OBJS = $(patsubst %.c, $(BUILD_DIR)/%.o, $(SRCS))
 
-CFLAGS = $(EFIINCS) -I../common -fno-stack-protector -fpic \
+CFLAGS = $(EFIINCS) -I../common -ffreestanding -fno-stack-protector -fpic \
          -fshort-wchar -mno-red-zone -Wall -std=c23 \
          -DEFI_FUNCTION_WRAPPER
 

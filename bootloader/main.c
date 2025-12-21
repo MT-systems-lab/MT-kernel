@@ -94,8 +94,15 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
     EFI_GRAPHICS_OUTPUT_PROTOCOL *Gop;
 
-    uefi_call_wrapper(
-        BS->LocateProtocol, 3, &gop_guid, NULL, (void **)&Gop);
+    uefi_call_wrapper(BS->LocateProtocol, 3, &gop_guid, NULL, (void **)&Gop);
+    b_info->Gpu.BaseAddress = (uint64_t)(UINTN)Gop->Mode->FrameBufferBase;
+    b_info->Gpu.BufferSize = (uint64_t)Gop->Mode->FrameBufferSize;
+    b_info->Gpu.Width = Gop->Mode->Info->HorizontalResolution;
+    b_info->Gpu.Height = Gop->Mode->Info->VerticalResolution;
+    b_info->Gpu.PixelsPerScanLine = Gop->Mode->Info->PixelsPerScanLine;
+
+    Print(L"GOP found: %dx%d at 0x%lx\n", b_info->Gpu.Width, b_info->Gpu.Height,
+          b_info->Gpu.BaseAddress);
 
     wait_for_key();
 

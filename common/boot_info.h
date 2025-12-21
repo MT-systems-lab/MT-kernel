@@ -21,7 +21,6 @@ typedef struct {
 
 typedef struct {
     Framebuffer Gpu;
-
     MemoryInfo MemInfo;
 
     void* AcpiRsdp;
