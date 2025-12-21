@@ -1,6 +1,5 @@
 #include "boot_info.h"
 #include "efi_tools.h"
-#include "guid_utils.h"
 #include <efi.h>
 #include <efilib.h>
 
@@ -52,35 +51,6 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     Print(L"--------------------------------------------------\n");
 
     // ------------------------------
-    // memory map
-    // ------------------------------
-    UINTN MemoryMapSize = 0;
-    EFI_MEMORY_DESCRIPTOR *MemoryMap = NULL;
-    UINTN MapKey;
-    UINTN DescriptorSize;
-    UINT32 DescriptorVersion;
-    uefi_call_wrapper(BS->GetMemoryMap, 5, &MemoryMapSize, NULL, &MapKey, &DescriptorSize,
-                      &DescriptorVersion);
-    MemoryMapSize += 2 * DescriptorSize;
-    uefi_call_wrapper(BS->AllocatePool, 3, EfiLoaderData, MemoryMapSize, (void **)&MemoryMap);
-    uefi_call_wrapper(BS->GetMemoryMap, 5, &MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize,
-                      &DescriptorVersion);
-
-    b_info->MemInfo.MemoryMap = MemoryMap;
-    b_info->MemInfo.MapSize = MemoryMapSize;
-    b_info->MemInfo.MapKey = MapKey;
-    b_info->MemInfo.DescriptorSize = DescriptorSize;
-    b_info->MemInfo.DescriptorVersion = DescriptorVersion;
-    Print(L"Memory Map Address: %p\n", MemoryMap);
-    Print(L"Memory Map Size: %lu bytes\n", MemoryMapSize);
-
-    UINT64 NumberOfPages = MemoryMap->NumberOfPages;
-    Print(L"Number Of 4KiB Pages: %lu\n", NumberOfPages);
-
-    Print(L"\nMemory Map Succesfully Retrieved.\n");
-    Print(L"--------------------------------------------------\n");
-
-    // ------------------------------
     // framebuffer
     // ------------------------------
 
@@ -100,15 +70,64 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
     Print(L"--------------------------------------------------\n");
 
-    wait_for_key();
-    print_smbios_legacy();
-    // sleep_seconds(1);
-    wait_for_key();
-
     // ------------------------------
     // Kernel loading
     // ------------------------------
+    void *kernel_entry = NULL;
+    Print(L"Loading kernel...\n");
+    EFI_STATUS status = load_kernel(ImageHandle, &kernel_entry);
+    if (EFI_ERROR(status)) {
+        Print(L"Failed to load kernel: %r\n", status);
+        wait_for_key();
+        return status;
+    }
+    Print(L"Kernel loaded at entry point: %p\n", kernel_entry);
+    Print(L"--------------------------------------------------\n");
 
+    // ------------------------------
+    // SMBIOS
+    // ------------------------------
+    print_smbios_legacy();
+    sleep_seconds(1);
+    wait_for_key();
 
+    // ------------------------------
+    // memory map
+    // ------------------------------
+    UINTN MemoryMapSize = 0;
+    EFI_MEMORY_DESCRIPTOR *MemoryMap = NULL;
+    UINTN MapKey;
+    UINTN DescriptorSize;
+    UINT32 DescriptorVersion;
+
+    uefi_call_wrapper(BS->GetMemoryMap, 5, &MemoryMapSize, NULL, &MapKey, &DescriptorSize,
+                      &DescriptorVersion);
+    MemoryMapSize += 8 * DescriptorSize;
+    uefi_call_wrapper(BS->AllocatePool, 3, EfiLoaderData, MemoryMapSize, (void **)&MemoryMap);
+
+    uefi_call_wrapper(BS->GetMemoryMap, 5, &MemoryMapSize, MemoryMap, &MapKey, &DescriptorSize,
+                      &DescriptorVersion);
+    uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, MapKey);
+
+    uint32_t *fb = (uint32_t *)b_info->Gpu.BaseAddress;
+    for (int i = 0; i < 50; i++) {
+        for (int j = 0; j < 50; j++) {
+            fb[i * b_info->Gpu.PixelsPerScanLine + j] = 0xFFFFFFFF; // White
+        }
+    }
+
+    b_info->MemInfo.MemoryMap = MemoryMap;
+    b_info->MemInfo.MapSize = MemoryMapSize;
+    b_info->MemInfo.DescriptorSize = DescriptorSize;
+
+    // ------------------------------
+    // Jump to kernel
+    // ------------------------------
+    typedef void (*KernelStartFunc)(BootInfo *);
+    KernelStartFunc kernel_main = (KernelStartFunc)kernel_entry;
+    kernel_main(b_info);
+
+    while (1)
+        ;
     return EFI_SUCCESS;
 }

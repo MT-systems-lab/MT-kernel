@@ -1,18 +1,12 @@
 #!/bin/bash
 
-cd bootloader
-make clean
+# make clean
 make
-cd ..
-
-mkdir -p iso/EFI/BOOT
-
-cp bootloader/build/bootloader.efi iso/EFI/BOOT/BOOTX64.EFI
 
 
 OVMF_CODE="/usr/share/ovmf/x64/OVMF_CODE.4m.fd"
 OVMF_VARS_SYS="/usr/share/ovmf/x64/OVMF_VARS.4m.fd"
-OVMF_VARS_LOCAL="bootloader/OVMF_VARS.fd"
+OVMF_VARS_LOCAL="bootloader/build/OVMF_VARS.fd"
 
 if [ ! -f "$OVMF_VARS_LOCAL" ]; then
     echo "[*] Creating local copy of OVMF_VARS..."

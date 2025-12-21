@@ -15,9 +15,7 @@ typedef struct {
 typedef struct {
   void *MemoryMap;
   uint64_t MapSize;
-  uint64_t MapKey;
   uint64_t DescriptorSize;
-  uint32_t DescriptorVersion;
 } MemoryInfo;
 
 typedef struct {
