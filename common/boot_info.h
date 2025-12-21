@@ -4,29 +4,30 @@
 #include <stdint.h>
 
 typedef struct {
-    uint64_t BaseAddress;
-    uint64_t BufferSize;
-    uint32_t Width;
-    uint32_t Height;
-    uint32_t PixelsPerScanLine;
+  uint64_t BaseAddress;
+  uint64_t BufferSize;
+  uint32_t Width;
+  uint32_t Height;
+  uint32_t PixelsPerScanLine;
+  uint8_t PixelFormat;
 } Framebuffer;
 
 typedef struct {
-    void* MemoryMap;
-    uint64_t MapSize;
-    uint64_t MapKey;
-    uint64_t DescriptorSize;
-    uint32_t DescriptorVersion;
+  void *MemoryMap;
+  uint64_t MapSize;
+  uint64_t MapKey;
+  uint64_t DescriptorSize;
+  uint32_t DescriptorVersion;
 } MemoryInfo;
 
 typedef struct {
-    Framebuffer Gpu;
-    MemoryInfo MemInfo;
+  Framebuffer Gpu;
+  MemoryInfo MemInfo;
 
-    void* AcpiRsdp;
-    void* SmbiosInfo;
+  void *AcpiRsdp;
+  void *SmbiosInfo;
 
-    void* RuntimeServices; 
+  void *RuntimeServices;
 
 } BootInfo;
 

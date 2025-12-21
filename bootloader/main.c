@@ -73,15 +73,8 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     b_info->MemInfo.DescriptorVersion = DescriptorVersion;
     Print(L"Memory Map Address: %p\n", MemoryMap);
     Print(L"Memory Map Size: %lu bytes\n", MemoryMapSize);
-    Print(L"Descriptor Size: %u bytes\n", DescriptorSize);
 
-    UINT32 MEMType = MemoryMap->Type;
-    EFI_PHYSICAL_ADDRESS PhysicalStart = MemoryMap->PhysicalStart;
-    EFI_VIRTUAL_ADDRESS VirtualStart = MemoryMap->VirtualStart;
     UINT64 NumberOfPages = MemoryMap->NumberOfPages;
-    Print(L"Memory Type: %u\n", MEMType);
-    Print(L"Physical Start: %p\n", PhysicalStart);
-    Print(L"Virtual Start: %p\n", VirtualStart);
     Print(L"Number Of 4KiB Pages: %lu\n", NumberOfPages);
 
     Print(L"\nMemory Map Succesfully Retrieved.\n");
@@ -100,16 +93,22 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     b_info->Gpu.Width = Gop->Mode->Info->HorizontalResolution;
     b_info->Gpu.Height = Gop->Mode->Info->VerticalResolution;
     b_info->Gpu.PixelsPerScanLine = Gop->Mode->Info->PixelsPerScanLine;
+    b_info->Gpu.PixelFormat = (uint8_t)Gop->Mode->Info->PixelFormat;
 
-    Print(L"GOP found: %dx%d at 0x%lx\n", b_info->Gpu.Width, b_info->Gpu.Height,
-          b_info->Gpu.BaseAddress);
+    Print(L"GOP found: %dx%d at 0x%lx with size: %d\n", b_info->Gpu.Width, b_info->Gpu.Height,
+          b_info->Gpu.BaseAddress, b_info->Gpu.BufferSize);
+
+    Print(L"--------------------------------------------------\n");
 
     wait_for_key();
-
     print_smbios_legacy();
-
-    sleep_seconds(2);
+    // sleep_seconds(1);
     wait_for_key();
+
+    // ------------------------------
+    // Kernel loading
+    // ------------------------------
+
 
     return EFI_SUCCESS;
 }
