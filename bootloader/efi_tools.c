@@ -9,3 +9,11 @@ void sleep_seconds(UINTN seconds) {
     uefi_call_wrapper(BS->CloseEvent, 1, EventTimer);
 }
 
+void wait_for_key() {
+    Print(L"Press any key to continue...\n");
+    UINTN Index;
+    uefi_call_wrapper(BS->WaitForEvent, 3, 1, &ST->ConIn->WaitForKey, &Index);
+
+    EFI_INPUT_KEY Key;
+    uefi_call_wrapper(ST->ConIn->ReadKeyStroke, 2, ST->ConIn, &Key);
+}

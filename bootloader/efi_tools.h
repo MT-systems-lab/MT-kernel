@@ -5,5 +5,6 @@
 #include <efilib.h>
 
 void sleep_seconds(UINTN seconds);
+void wait_for_key();
 
 #endif // EFI_TOOLS_H

@@ -44,6 +44,7 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     Print(L"--------------------------------------------------\n");
 
     sleep_seconds(2);
+    wait_for_key();
 
     return EFI_SUCCESS;
 }
