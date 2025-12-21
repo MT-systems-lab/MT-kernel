@@ -17,3 +17,15 @@ void wait_for_key() {
     EFI_INPUT_KEY Key;
     uefi_call_wrapper(ST->ConIn->ReadKeyStroke, 2, ST->ConIn, &Key);
 }
+
+void printTimeDate() {
+    EFI_TIME Time;
+    EFI_STATUS Status;
+    Status = uefi_call_wrapper(RT->GetTime, 2, &Time, NULL);
+    if (EFI_ERROR(Status)) {
+        Print(L"Error getting time: %r\n", Status);
+        return;
+    }
+    Print(L"Current Time: %02d:%02d:%02d\n", Time.Hour, Time.Minute, Time.Second);
+    Print(L"Date: %04d-%02d-%02d\n", Time.Year, Time.Month, Time.Day);
+}
