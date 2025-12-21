@@ -14,6 +14,7 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
                       EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
 
     InitializeLib(ImageHandle, SystemTable);
+    set_best_text_mode();
 
     Print(L"-------------------------------\n");
     Print(L"|     MT GNU-EFI Bootloader   |\n");

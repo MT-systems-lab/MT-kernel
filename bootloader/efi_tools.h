@@ -10,5 +10,7 @@ void printTimeDate();
 void *get_acpi_rsdp();
 void* get_smbios_ptr();
 void print_smbios_legacy();
+void set_best_text_mode();
+
 
 #endif // EFI_TOOLS_H

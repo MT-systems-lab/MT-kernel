@@ -42,7 +42,7 @@ void *get_acpi_rsdp() {
     return NULL;
 }
 
-void* get_smbios_ptr() {
+void *get_smbios_ptr() {
     EFI_GUID smbios_guid = SMBIOS_TABLE_GUID;
     for (UINTN i = 0; i < ST->NumberOfTableEntries; i++) {
         if (CompareGuid(&ST->ConfigurationTable[i].VendorGuid, &smbios_guid) == 0) {
@@ -52,3 +52,32 @@ void* get_smbios_ptr() {
     return NULL;
 }
 
+void set_best_text_mode() {
+    UINTN max_cols = 0;
+    UINTN max_rows = 0;
+    UINTN best_mode = 0;
+    UINTN cols, rows;
+    EFI_STATUS status;
+
+    for (INTN i = 0; i < ST->ConOut->Mode->MaxMode; i++) {
+
+        status = uefi_call_wrapper(ST->ConOut->QueryMode, 4, ST->ConOut, i, &cols, &rows);
+
+        if (EFI_ERROR(status))
+            continue;
+
+        if ((cols * rows) > (max_cols * max_rows)) {
+            max_cols = cols;
+            max_rows = rows;
+            best_mode = i;
+        }
+    }
+
+    if (max_cols > 0) {
+        uefi_call_wrapper(ST->ConOut->SetMode, 2, ST->ConOut, best_mode);
+        uefi_call_wrapper(ST->ConOut->ClearScreen, 1, ST->ConOut);
+        Print(L"Switched to Text Mode %d (%dx%d)\n", best_mode, max_cols, max_rows);
+    } else {
+        Print(L"Could not find a better text mode.\n");
+    }
+}
