@@ -23,7 +23,7 @@ void print_smbios_legacy() {
 
         // --- TYPE 1: System Information (Motherboard) ---
         if (smbios.Hdr->Type == 1) {
-            Print(L"\n[System]\n");
+            Print(L"[System]\n");
             Print(L"  Maker:   %a\n", LibGetSmbiosString(&smbios, smbios.Type1->Manufacturer));
             Print(L"  Product: %a\n", LibGetSmbiosString(&smbios, smbios.Type1->ProductName));
         }
@@ -42,5 +42,5 @@ void print_smbios_legacy() {
             break;
         }
     }
-    Print(L"\n--- End of SMBIOS ---\n");
+    Print(L"--------------------------------------------------\n");
 }

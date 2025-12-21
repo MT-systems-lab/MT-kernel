@@ -20,7 +20,6 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
     printTimeDate();
 
-    Print(L"\n");
     Print(L"--------------------------------------------------\n");
     Print(L"--- UEFI Configuration Table ---\n");
     Print(L"--------------------------------------------------\n");
