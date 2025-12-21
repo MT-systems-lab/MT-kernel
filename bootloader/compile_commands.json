@@ -5,19 +5,67 @@
       "-I/usr/include/efi",
       "-I/usr/include/efi/x86_64",
       "-I/usr/include/efi/protocol",
+      "-I../common",
       "-fno-stack-protector",
       "-fpic",
       "-fshort-wchar",
       "-mno-red-zone",
       "-Wall",
       "-std=c23",
+      "-DEFI_FUNCTION_WRAPPER",
       "-c",
       "-o",
-      "main.o",
+      "build/efi_tools.o",
+      "efi_tools.c"
+    ],
+    "directory": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader",
+    "file": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader/efi_tools.c",
+    "output": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader/build/efi_tools.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I/usr/include/efi",
+      "-I/usr/include/efi/x86_64",
+      "-I/usr/include/efi/protocol",
+      "-I../common",
+      "-fno-stack-protector",
+      "-fpic",
+      "-fshort-wchar",
+      "-mno-red-zone",
+      "-Wall",
+      "-std=c23",
+      "-DEFI_FUNCTION_WRAPPER",
+      "-c",
+      "-o",
+      "build/guid_utils.o",
+      "guid_utils.c"
+    ],
+    "directory": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader",
+    "file": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader/guid_utils.c",
+    "output": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader/build/guid_utils.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-I/usr/include/efi",
+      "-I/usr/include/efi/x86_64",
+      "-I/usr/include/efi/protocol",
+      "-I../common",
+      "-fno-stack-protector",
+      "-fpic",
+      "-fshort-wchar",
+      "-mno-red-zone",
+      "-Wall",
+      "-std=c23",
+      "-DEFI_FUNCTION_WRAPPER",
+      "-c",
+      "-o",
+      "build/main.o",
       "main.c"
     ],
     "directory": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader",
     "file": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader/main.c",
-    "output": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader/main.o"
+    "output": "/home/tcvdh/Documents/OS_THIJS_TEST/bootloader/build/main.o"
   }
 ]

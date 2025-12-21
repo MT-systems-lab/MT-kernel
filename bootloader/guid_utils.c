@@ -16,5 +16,4 @@ CHAR16* GetGuidName(EFI_GUID *Guid) {
     CHAR16 buffer[40];
     SPrint(buffer, sizeof(buffer), L"%g", Guid);
     return StrDuplicate(buffer);
-    return L"Unknown GUID";
 }

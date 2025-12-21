@@ -24,6 +24,7 @@ fi
 # use `-cpu qemu64` without `-enable-kvm` for emulated CPU
 qemu-system-x86_64 \
     -cpu qemu64 \
+    -machine q35 \
     -drive if=pflash,format=raw,unit=0,file="$OVMF_CODE",readonly=on \
     -drive if=pflash,format=raw,unit=1,file="$OVMF_VARS_LOCAL" \
     -drive format=raw,file=fat:rw:iso \
