@@ -1,17 +1,17 @@
+#include "efi_tools.h"
 #include "guid_utils.h"
 #include <efi.h>
 #include <efilib.h>
 
 EFI_STATUS
 EFIAPI
-efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *ST) {
+efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     uefi_call_wrapper(ST->ConOut->Reset, 2, ST->ConOut, FALSE);
     uefi_call_wrapper(ST->ConOut->ClearScreen, 1, ST->ConOut);
     uefi_call_wrapper(ST->ConOut->SetAttribute, 2, ST->ConOut,
                       EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
 
-    InitializeLib(ImageHandle, ST);
-
+    InitializeLib(ImageHandle, SystemTable);
 
     Print(L"-------------------------------\n");
     Print(L"|     MT GNU-EFI Bootloader   |\n");
@@ -19,7 +19,7 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *ST) {
 
     EFI_TIME Time;
     EFI_STATUS Status;
-    Status = uefi_call_wrapper(ST->RuntimeServices->GetTime, 2, &Time, NULL);
+    Status = uefi_call_wrapper(RT->GetTime, 2, &Time, NULL);
     if (EFI_ERROR(Status)) {
         Print(L"Error getting time: %r\n", Status);
         return Status;
@@ -27,7 +27,6 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *ST) {
     Print(L"Current Time: %02d:%02d:%02d\n", Time.Hour, Time.Minute, Time.Second);
     Print(L"Date: %04d-%02d-%02d\n", Time.Year, Time.Month, Time.Day);
     Print(L"--------------------------------------------------\n");
-
 
     Print(L"\n");
     Print(L"--- UEFI Configuration Table ---\n");
@@ -44,10 +43,7 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *ST) {
     }
     Print(L"--------------------------------------------------\n");
 
-
-    while (1) {
-        __asm__ __volatile__("hlt");
-    }
+    sleep_seconds(2);
 
     return EFI_SUCCESS;
 }

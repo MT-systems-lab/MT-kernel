@@ -10,7 +10,7 @@ EFILIB = /usr/lib
 EFI_CRT_OBJS = $(EFILIB)/crt0-efi-x86_64.o
 EFI_LDS = $(EFILIB)/elf_x86_64_efi.lds
 
-OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/guid_utils.o
+OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/guid_utils.o $(BUILD_DIR)/efi_tools.o
 
 CFLAGS = $(EFIINCS) -fno-stack-protector -fpic \
          -fshort-wchar -mno-red-zone -Wall -std=c23 \

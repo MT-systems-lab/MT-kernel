@@ -20,9 +20,12 @@ if [ ! -f "$OVMF_VARS_LOCAL" ]; then
     chmod 644 "$OVMF_VARS_LOCAL"
 fi
 
+# use `-cpu host` with `-enable-kvm` for native CPU
+# use `-cpu qemu64` without `-enable-kvm` for emulated CPU
 qemu-system-x86_64 \
     -cpu qemu64 \
     -drive if=pflash,format=raw,unit=0,file="$OVMF_CODE",readonly=on \
     -drive if=pflash,format=raw,unit=1,file="$OVMF_VARS_LOCAL" \
     -drive format=raw,file=fat:rw:iso \
-    -net none
+    -net none \
+    -monitor stdio \
