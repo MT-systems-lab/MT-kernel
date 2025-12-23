@@ -1,0 +1,39 @@
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[8;042;160t0[2J[01;01H[2J[01;01H[8;056;240t0[2J[01;01HBdsDxe: loading Boot0002 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0002 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[2J[01;01H[8;042;160t0[2J[01;01H[2J[01;01HSwitched to Text Mode 4 (160x42)
+-------------------------------
+|     MT GNU-EFI Bootloader   |
+-------------------------------
+Current Time: 00:57:29
+Date: 2025-12-23
+--------------------------------------------------
+--- UEFI Configuration Table ---
+--------------------------------------------------
+| Table 0: EE4E5898-3914-4259-9D6E-DC7BD79403CF at 0x7F4EBF98
+| Table 1: 05AD34BA-6F02-4214-952E-4DA0398E2BB9 at 0x7FEA71E0
+| Table 2: 7739F24C-93D7-11D4-9A3A-0090273FC14D at 0x7F4E7018
+| Table 3: 4C19049F-4137-4DD3-9C10-8B97A83FFDFA at 0x7FEA6B20
+| Table 4: 49152E77-1ADA-4764-B7A2-7AFEFED95E8B at 0x7FEA9060
+| Table 5: 060CC026-4C0D-4DDA-8F41-595FEF00A502 at 0x7F589018
+| Table 6: SMBIOS at 0x7F588000
+| Table 7: ACPI 1.0 (RSDP) at 0x7F77E000
+| Table 8: ACPI 2.0 (RSDP) at 0x7F77E014
+| Table 9: DCFA911D-26EB-469F-A220-38B7DC461220 at 0x7E73F518
+--------------------------------------------------
+ACPI RSDP 2.0 Address: 0x7F77E014
+SMBIOS Entry Point Address: 0x7F588000
+--------------------------------------------------
+GOP found: 1280x800 at 0x80000000 with size: 4096000
+--------------------------------------------------
+Loading kernel...
+Kernel loaded at entry point: 0x100000
+--------------------------------------------------
+[System]
+  Maker:   QEMU
+  Product: Standard PC (Q35 + ICH9, 2009)
+
+[CPU]
+  Model:   pc-q35-10.1
+  Socket:  CPU 0
+--------------------------------------------------
+Press any key to continue...
