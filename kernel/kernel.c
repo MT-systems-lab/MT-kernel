@@ -3,7 +3,8 @@
 void init_graphics(BootInfo *boot_info);
 void kprint(const char *str);
 
-__attribute__((section(".entry"))) void kernel_entry(BootInfo *boot_info) {
+// __attribute__((section(".entry"))) 
+void kernel_main(BootInfo *boot_info) {
 
     init_graphics(boot_info);
     unsigned int *fb = (unsigned int *)boot_info->Gpu.BaseAddress;

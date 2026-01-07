@@ -1,11 +1,11 @@
-ENTRY(kernel_main)
+ENTRY(_start)
 
 SECTIONS
 {
     . = 1M;
 
     .text : {
-        *(.entry)
+        KEEP(*(.entry))
         *(.text)
     }
     .rodata : {

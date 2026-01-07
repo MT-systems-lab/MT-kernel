@@ -22,7 +22,7 @@ QEMU_FLAGS=(
     -m 2G
     -drive if=pflash,format=raw,unit=0,file="$OVMF_CODE",readonly=on
     -drive if=pflash,format=raw,unit=1,file="$OVMF_VARS_LOCAL"
-    -drive format=raw,file=fat:rw:iso  # <--- Mounts your 'iso' folder as a USB stick
+    -drive format=raw,file=fat:rw:iso
     -net none
 )
 if [ "$1" == "debug" ]; then
@@ -49,7 +49,7 @@ if [ "$1" == "debug" ]; then
         -ex "set disassembly-flavor intel" \
         -ex "layout split" \
         -ex "layout regs" \
-        -ex "break kernel_entry" \
+        -ex "break *0x100000" \
         -ex "continue" \
         "$KERNEL_ELF"
 
