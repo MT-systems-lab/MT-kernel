@@ -12,7 +12,10 @@ void kernel_main(BootInfo *boot_info) {
     for (unsigned long i = 0; i < boot_info->Gpu.BufferSize / 4; i++)
         fb[i] = 0xFF0000FF;
 
-    kprint("MTOS> Hello, Kernel!");
+    kprint("MTOS> Hello, Kernel!\n");
+    kprint("MTOS> Graphics Initialized.");
+    for (int i = 0; i < 50; i++)
+        kprint("MTOS> Line number\n");
 
     while (1)
         __asm__("hlt");

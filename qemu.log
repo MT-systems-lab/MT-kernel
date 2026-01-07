@@ -4,7 +4,7 @@ BdsDxe: starting Boot0002 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x
 -------------------------------
 |     MT GNU-EFI Bootloader   |
 -------------------------------
-Current Time: 19:23:07
+Current Time: 20:04:59
 Date: 2026-01-07
 --------------------------------------------------
 --- UEFI Configuration Table ---
@@ -18,7 +18,7 @@ Date: 2026-01-07
 | Table 6: SMBIOS at 0x7F588000
 | Table 7: ACPI 1.0 (RSDP) at 0x7F77E000
 | Table 8: ACPI 2.0 (RSDP) at 0x7F77E014
-| Table 9: DCFA911D-26EB-469F-A220-38B7DC461220 at 0x7E731218
+| Table 9: DCFA911D-26EB-469F-A220-38B7DC461220 at 0x7E73F518
 --------------------------------------------------
 ACPI RSDP 2.0 Address: 0x7F77E014
 SMBIOS Entry Point Address: 0x7F588000

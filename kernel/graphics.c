@@ -39,6 +39,25 @@ void draw_char(int x, int y, char c, unsigned int color, int scale) {
     }
 }
 
+void scroll_screen() {
+    unsigned int *fb = (unsigned int *)k_boot_info->Gpu.BaseAddress;
+    unsigned int stride = k_boot_info->Gpu.PixelsPerScanLine;
+    unsigned int height = k_boot_info->Gpu.Height;
+    unsigned int width = k_boot_info->Gpu.Width;
+
+    int line_height = 16 * FONT_SCALE;
+    for (unsigned int y = 0; y < height - line_height; y++) {
+        for (unsigned int x = 0; x < width; x++) {
+            fb[y * stride + x] = fb[(y + line_height) * stride + x];
+        }
+    }
+    for (unsigned int y = height - line_height; y < height; y++) {
+        for (unsigned int x = 0; x < width; x++) {
+            fb[y * stride + x] = 0xFF0000FF;
+        }
+    }
+}
+
 void kprint(const char *str) {
     unsigned int color = 0xFFFFFFFF;
 
@@ -51,6 +70,10 @@ void kprint(const char *str) {
         if (c == '\n') {
             cursor_x = 10;
             cursor_y += char_height + (2 * FONT_SCALE);
+            if (cursor_y >= k_boot_info->Gpu.Height - char_height) {
+                scroll_screen();
+                cursor_y -= char_height + (2 * FONT_SCALE);
+            }
             str++;
             continue;
         }
@@ -67,3 +90,4 @@ void kprint(const char *str) {
         str++;
     }
 }
+
