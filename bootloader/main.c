@@ -108,12 +108,14 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
                       &DescriptorVersion);
     uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, MapKey);
 
-    uint32_t *fb = (uint32_t *)b_info->Gpu.BaseAddress;
-    for (int i = 0; i < 50; i++) {
-        for (int j = 0; j < 50; j++) {
-            fb[i * b_info->Gpu.PixelsPerScanLine + j] = 0xFFFFFFFF; // White
-        }
-    }
+    // print test square on framebuffer
+    //
+    // uint32_t *fb = (uint32_t *)b_info->Gpu.BaseAddress;
+    // for (int i = 0; i < 50; i++) {
+    //     for (int j = 0; j < 50; j++) {
+    //         fb[i * b_info->Gpu.PixelsPerScanLine + j] = 0xFFFFFFFF; // White
+    //     }
+    // }
 
     b_info->MemInfo.MemoryMap = MemoryMap;
     b_info->MemInfo.MapSize = MemoryMapSize;

@@ -1,10 +1,10 @@
 #include "../common/boot_info.h"
-#include "../common/font.h"
+#include "../common/font8x16.h"
 
 static BootInfo *k_boot_info = 0;
 static unsigned int cursor_x = 0;
 static unsigned int cursor_y = 0;
-static int FONT_SCALE = 2;
+static int FONT_SCALE = 1;
 
 void init_graphics(BootInfo *boot_info) {
     k_boot_info = boot_info;
@@ -22,16 +22,13 @@ void put_pixel(unsigned int x, unsigned int y, unsigned int color) {
 }
 
 void draw_char(int x, int y, char c, unsigned int color, int scale) {
-    if (c < 0 || c > 127)
-        return;
+    unsigned char index = (unsigned char)c;
 
-    int index = c;
-
-    for (int row = 0; row < 8; row++) {
-        unsigned char bit_row = font8x8_basic[index][row];
+    for (int row = 0; row < 16; row++) {
+        unsigned char bit_row = font8x16_basic[index * 16 + row];
 
         for (int col = 0; col < 8; col++) {
-            if ((bit_row >> col) & 1) {
+            if ((bit_row >> (7 - col)) & 1) {
                 for (int s_y = 0; s_y < scale; s_y++) {
                     for (int s_x = 0; s_x < scale; s_x++) {
                         put_pixel(x + (col * scale) + s_x, y + (row * scale) + s_y, color);
@@ -45,7 +42,7 @@ void draw_char(int x, int y, char c, unsigned int color, int scale) {
 void kprint(const char *str) {
     unsigned int color = 0xFFFFFFFF;
 
-    int char_height = 8 * FONT_SCALE;
+    int char_height = 16 * FONT_SCALE;
     int char_width = 8 * FONT_SCALE;
 
     while (*str) {
