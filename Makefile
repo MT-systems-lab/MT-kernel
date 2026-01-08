@@ -6,8 +6,9 @@ KERNEL_BIN  = $(KERN_DIR)/build/kernel.bin
 KERNEL_ELF  = $(KERN_DIR)/build/kernel.elf
 
 # Docker Configuration
+DOCKER_USER_FLAGS =
 DOCKER_IMG  = tcvdh/mtos-builder
-DOCKER_CMD  = docker run --rm -v "$(shell pwd)":/root/os $(DOCKER_IMG)
+DOCKER_CMD  = docker run --rm ${DOCKER_USER_FLAGS} -v "$(shell pwd)":/root/os $(DOCKER_IMG)
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
@@ -16,6 +17,7 @@ ifeq ($(UNAME_S),Darwin)
 else
     OVMF_CODE     = /usr/share/ovmf/x64/OVMF_CODE.4m.fd
     OVMF_VARS_SYS = /usr/share/ovmf/x64/OVMF_VARS.4m.fd
+	DOCKER_USER_FLAGS = --user $(shell id -u):$(shell id -g)
 endif
 
 OVMF_VARS_LOCAL = $(BOOT_DIR)/build/OVMF_VARS.fd
@@ -28,9 +30,11 @@ QEMU_FLAGS = -machine q35 -m 2G \
              -net none \
              $(QEMU_ACCEL)
 
-.PHONY: all clean run debug docker-build docker-run usb FORCE
+.PHONY: all build clean run debug docker-build docker-run usb FORCE
 
-all: $(BOOTLOADER) $(KERNEL_BIN)
+build: $(BOOTLOADER) $(KERNEL_BIN)
+
+all: build
 	@mkdir -p $(ISO_DIR)/EFI/BOOT
 	cp $(BOOTLOADER) $(ISO_DIR)/EFI/BOOT/BOOTX64.EFI
 	cp $(KERNEL_BIN) $(ISO_DIR)/kernel.bin
@@ -50,7 +54,7 @@ clean:
 
 docker-build:
 	@echo ">> Compiling inside Docker..."
-	$(DOCKER_CMD) make all
+	$(DOCKER_CMD) make build
 
 docker-run: docker-build run
 
