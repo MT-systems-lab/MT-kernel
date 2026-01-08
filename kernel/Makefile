@@ -11,8 +11,9 @@ BUILD_DIR = build
 TARGET_ELF = $(BUILD_DIR)/kernel.elf
 TARGET_BIN = $(BUILD_DIR)/kernel.bin
 
-ASM_SRCS = $(wildcard *.S)
-C_SRCS = $(wildcard *.c)
+SRCDIRS = . gdt
+ASM_SRCS = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.S))
+C_SRCS = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.c))
 ASM_OBJS = $(patsubst %.S, $(BUILD_DIR)/%.o, $(ASM_SRCS))
 C_OBJS = $(patsubst %.c, $(BUILD_DIR)/%.o, $(C_SRCS))
 
@@ -21,11 +22,11 @@ OBJS = $(ASM_OBJS) $(C_OBJS)
 all: $(TARGET_BIN)
 
 $(BUILD_DIR)/%.o: %.c
-	@mkdir -p $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/%.o: %.S
-	@mkdir -p $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $< -o $@
 
 $(TARGET_ELF): $(OBJS)
